@@ -30,51 +30,99 @@ class Translator {
   }
 
   americanToBritish(text) {
+    //American Only
     for (let i = 0; i < this.americanOnlyK.length; i++) {
       text = text.replace(
         this.americanOnlyK[i],
         `${this.spanOpen}${this.americanOnlyV[i]}${this.spanClose}`
       );
     }
+    //Spelling
     for (let i = 0; i < this.amToBrSpellingK.length; i++) {
       text = text.replace(
         this.amToBrSpellingK[i],
         `${this.spanOpen}${this.amToBrSpellingV[i]}${this.spanClose}`
       );
     }
+    //Titles
     for (let i = 0; i < this.amToBrTitlesK.length; i++) {
+      let textSearch =
+        this.amToBrTitlesK[i][0].toUpperCase() + this.amToBrTitlesK[i].slice(1);
+
+      let textReplace =
+        this.amToBrTitlesV[i][0].toUpperCase() + this.amToBrTitlesV[i].slice(1);
+      text = text.replace(
+        textSearch,
+        `${this.spanOpen}${textReplace}${this.spanClose}`
+      );
+
       text = text.replace(
         this.amToBrTitlesK[i],
-        `${this.spanOpen} ${this.amToBrTitlesV[i]} ${this.spanClose}`
+        `${this.spanOpen}${this.amToBrTitlesV[i]}${this.spanClose}`
+      );
+    }
+    //Hour
+    const timeRegex = /\d{1,2}:\d{2}/;
+    const timeMatch = text.match(timeRegex);
+    if (timeMatch) {
+      const time = timeMatch[0];
+      console.log("Time found: " + time);
+      let timeReplace = time.replace(":", ".");
+      console.log("Time replaced: " + timeReplace);
+      text = text.replace(
+        time,
+        `${this.spanOpen}${timeReplace}${this.spanClose}`
       );
     }
     return text;
   }
 
   britishToAmerican(text) {
+    //British Only
     for (let i = 0; i < this.britishOnlyK.length; i++) {
       text = text.replace(
         this.britishOnlyK[i],
         `${this.spanOpen} ${this.britishOnlyV[i]} ${this.spanClose}`
       );
     }
+    //Spelling
     for (let i = 0; i < this.amToBrSpellingK.length; i++) {
       text = text.replace(
         this.amToBrSpellingV[i],
         `${this.spanOpen} ${this.amToBrSpellingK[i]} ${this.spanClose}`
       );
     }
+    //Titles
     for (let i = 0; i < this.amToBrTitlesK.length; i++) {
-      // if (text[0] == text[0].toUpperCase()) {
-      //   this.isCap = true;
-      // }
-      //   if (text.toLowerCase().includes(this.amToBrTitlesV[i])) {
+      let textSearch =
+        this.amToBrTitlesV[i][0].toUpperCase() +
+        this.amToBrTitlesV[i].slice(1) +
+        " ";
+      let textReplace =
+        this.amToBrTitlesK[i][0].toUpperCase() + this.amToBrTitlesK[i].slice(1);
+      text = text.replace(
+        textSearch,
+        `${this.spanOpen}${textReplace}${this.spanClose}`
+      );
       text = text.replace(
         this.amToBrTitlesV[i],
-        `${this.spanOpen} ${this.amToBrTitlesK[i]} ${this.spanClose}`
+        `${this.spanOpen}${this.amToBrTitlesK[i]}${this.spanClose}`
       );
     }
-    // }
+    //Hour
+    const timeRegex = /\d{1,2}\.\d{2}/;
+    const timeMatch = text.match(timeRegex);
+    if (timeMatch) {
+      const time = timeMatch[0];
+      console.log("Time found: " + time);
+      let timeReplace = time.replace(".", ":");
+      console.log("Time replaced: " + timeReplace);
+      text = text.replace(
+        time,
+        `${this.spanOpen}${timeReplace}${this.spanClose}`
+      );
+    }
+
     return text;
   }
 
